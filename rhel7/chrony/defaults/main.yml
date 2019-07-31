@@ -1,0 +1,17 @@
+---
+# NTPサーバー
+NTP_SERVERS:
+  - ntp1.jst.mfeed.ad.jp
+  - ntp2.jst.mfeed.ad.jp
+  - ntp3.jst.mfeed.ad.jp
+
+# うるう秒対策
+# ignoreの場合対策なし(富士通推奨値)。
+NTP_CHRONY_LEAPSEC: ignore
+
+# サーバー動作設定
+# 許可するネットワークのリストを定義します。
+# ここで設定するリストが空で無い場合、chronyはサーバーとして動作します。
+NTP_CHRONY_ALLOWS: []
+
+

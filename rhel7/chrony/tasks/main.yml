@@ -1,0 +1,35 @@
+---
+- name: Install chrony
+  yum:
+    name: chrony
+    state: latest
+
+- name: Configure chrony.
+  template:
+    src: chrony.conf.j2
+    dest: /etc/chrony.conf
+    owner: root
+    group: root
+    mode: 644
+  notify: restart chronyd
+
+- name: Ensure systemd unit list.
+  shell: "systemctl list-unit-files | awk '{print $1}'"
+  changed_when: false
+  register: systemd_unit_list
+
+- name: Disable ntpd service.
+  systemd:
+    name: "{{ item }}"
+    enabled: no
+    state: stopped
+  when: item in systemd_unit_list.stdout_lines 
+  loop: 
+    - "ntpd.service"
+    - "ntpdate.service"
+
+- name: Enable chrony.
+  systemd:
+    name: chronyd
+    enabled: yes
+    state: started
